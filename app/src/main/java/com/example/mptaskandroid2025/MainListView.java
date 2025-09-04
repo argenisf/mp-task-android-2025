@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +48,7 @@ public class MainListView extends AppCompatActivity {
     RecyclerViewAdapter completedAdapter;
 
     LocalStorageHandler storageHandler;
+    MixpanelAPI mMixpanel;
 
 
     @Override
@@ -54,6 +56,8 @@ public class MainListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list_view);
         mContext = this;
+
+        mMixpanel = MixpanelAPI.getInstance(this,MainActivity.MPToken,false);
 
         mMainForm = (ConstraintLayout) findViewById(R.id.mainFormLayout);
         mLogOut = (Button) findViewById(R.id.btnLogOut);
@@ -124,12 +128,15 @@ public class MainListView extends AppCompatActivity {
                         break;
                     case "new_task":
                         receivedNewTaskRequest(task);
+                        mMixpanel.track("task created");
                         break;
                     case "update_task":
                         receivedUpdateTaskRequest(task);
+                        mMixpanel.track("task updated");
                         break;
                     case "delete_task":
                         receivedDeleteTaskRequest(task);
+                        mMixpanel.track("task deleted");
                         break;
                 }
             }
@@ -287,9 +294,11 @@ public class MainListView extends AppCompatActivity {
 
         // Update user
         mUser.resetUser();
-        this.finish();
-
         //update Lists
         mState.resetLists();
+        mMixpanel.reset();
+        this.finish();
+
+
     }
 }// end of activity

@@ -15,13 +15,19 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.mixpanel.android.sessionreplay.MPSessionReplay;
+import com.mixpanel.android.sessionreplay.models.MPSessionReplayConfig;
+import com.mixpanel.android.sessionreplay.sensitive_views.AutoMaskedView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.Format;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.Objects;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,11 +42,30 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPref;
     String customServerURL = "http://10.0.0.228:8888/mp-server-side-training/";
     LocalStorageHandler storageHandler;
+    public static final String MPToken = "f8bd7cddaf94642530004c3d0509691f";
+    MixpanelAPI mMixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mMixpanel = MixpanelAPI.getInstance(this,MPToken,false);
+        mMixpanel.track("App loaded into memory");
+        mMixpanel.flush();
+        mMixpanel.setEnableLogging(true);
+
+        MPSessionReplayConfig config = new MPSessionReplayConfig();
+        config.setAutoStartRecording(true);
+        config.setWifiOnly(false);
+        config.setFlushInterval(10);
+        config.setRecordingSessionsPercent(100);
+        config.setEnableLogging(true);
+        Set<AutoMaskedView> emptySet = Collections.emptySet();
+        config.setAutoMaskedViews(emptySet);
+
+
+        MPSessionReplay.initialize(this, MPToken, mMixpanel.getDistinctId(), config);
 
         mContext = this;
         demoAuthBtn = (Button) findViewById(R.id.demoAuthBtn);
@@ -117,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                mMixpanel.identify(String.valueOf(mUser.getUserID()));
+                mMixpanel.getPeople().set("$email",mUser.getEmail());
+                mMixpanel.track("user logged in");
                 Intent intent = new Intent(mContext, MainListView.class);
                 setInactiveRequest();
                 startActivity(intent);

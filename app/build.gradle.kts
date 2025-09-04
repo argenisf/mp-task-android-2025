@@ -47,4 +47,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.volley)
     implementation(libs.recyclerview)
+    implementation("com.mixpanel.android:mixpanel-android:8.2.2")
+    implementation("com.mixpanel.android:mixpanel-android-session-replay:1.0.1")
 }
