@@ -1,15 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.mptaskandroid2025"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.mptaskandroid2025"
         minSdk = 29
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -32,6 +33,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
@@ -42,11 +46,12 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.activity)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.volley)
     implementation(libs.recyclerview)
-    implementation("com.mixpanel.android:mixpanel-android:8.2.2")
-    implementation("com.mixpanel.android:mixpanel-android-session-replay:1.0.1")
+    implementation("com.mixpanel.android:mixpanel-android:8.2.7")
+    implementation("com.mixpanel.android:mixpanel-android-session-replay:1.0.5")
 }

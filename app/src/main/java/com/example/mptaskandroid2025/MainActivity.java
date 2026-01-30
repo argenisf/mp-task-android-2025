@@ -54,20 +54,12 @@ public class MainActivity extends AppCompatActivity {
         mMixpanel.track("App loaded into memory");
         mMixpanel.flush();
         mMixpanel.setEnableLogging(true);
-
-        MPSessionReplayConfig config = new MPSessionReplayConfig();
-        config.setAutoStartRecording(true);
-        config.setWifiOnly(false);
-        config.setFlushInterval(10);
-        config.setRecordingSessionsPercent(100);
-        config.setEnableLogging(true);
-        Set<AutoMaskedView> emptySet = Collections.emptySet();
-        config.setAutoMaskedViews(emptySet);
-
-
-        MPSessionReplay.initialize(this, MPToken, mMixpanel.getDistinctId(), config);
-
         mContext = this;
+
+        SRManager srManager = new SRManager();
+        srManager.initialize(mContext,mMixpanel.getDistinctId());
+
+
         demoAuthBtn = (Button) findViewById(R.id.demoAuthBtn);
         emailAuthBtn = (Button) findViewById(R.id.emailAuthBtn);
         emailInput = (EditText) findViewById(R.id.inputEmail);
@@ -143,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 mMixpanel.identify(String.valueOf(mUser.getUserID()));
+                SRManager srManager = new SRManager();
+                srManager.changeIdentity(mMixpanel.getDistinctId());
                 mMixpanel.getPeople().set("$email",mUser.getEmail());
                 mMixpanel.track("user logged in");
                 Intent intent = new Intent(mContext, MainListView.class);

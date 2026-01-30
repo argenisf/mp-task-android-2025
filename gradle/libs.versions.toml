@@ -11,6 +11,8 @@ navigationUi = "2.6.0"
 recyclerview = "1.4.0"
 volley = "1.2.1"
 activity = "1.10.1"
+kotlin = "2.0.21"
+coreKtx = "1.17.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,7 +26,9 @@ navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
